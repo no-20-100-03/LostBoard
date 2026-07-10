@@ -8,387 +8,193 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
-  /* ============================================================
-     CONFIGURATION — modifie ces valeurs pour TA planche.
-     Un seul tag NFC = un seul fichier = une seule config.
-     ============================================================ */
-
   :root {
-    --owner-name: "Vincent";
-    --board-label: "Planche de kitesurf";
-    --whatsapp-number: "15143580304";   /* format intl, sans + ni espaces */
-    --sms-number: "+15143580304";
-    --call-number: "+15143580304";
-    --email: "no_20-100@hotmail.com";
-    --reward-line: "";  /* ex: "Une petite récompense t'attend 🙂" — laisse vide pour ne rien afficher */
+    --navy-deep:#0a1f2b; --navy:#123244; --teal:#2f6b73; --sand:#e9dcc3; --sand-dim:#cdbf9d;
+    --coral:#e8792e; --coral-dim:#c25f1c; --foam:#f4efe4;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; min-height:100%; background:radial-gradient(120% 90% at 50% -10%, var(--navy) 0%, var(--navy-deep) 55%, #071620 100%); color:var(--foam); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased; }
+  body { display:flex; align-items:flex-start; justify-content:center; padding:0 20px 60px; }
+  .wrap { width:100%; max-width:440px; padding-top:6vh; }
+
+  .lang-row { display:flex; justify-content:flex-end; margin-bottom:22px; }
+  .lang-toggle { display:inline-flex; background:rgba(244,239,228,.06); border:1px solid rgba(244,239,228,.2); border-radius:100px; padding:3px; gap:2px; }
+  .lang-toggle button { border:none; background:none; color:var(--sand-dim); font-family:'Inter',sans-serif; font-size:12px; font-weight:600; letter-spacing:.03em; padding:5px 11px; border-radius:100px; cursor:pointer; }
+  .lang-toggle button.active { background:var(--coral); color:var(--navy-deep); }
+  .lang-toggle button:not(.active):hover { color:var(--foam); }
+
+  .drift { width:100%; height:74px; margin-bottom:6px; overflow:visible; }
+  .drift path { fill:none; stroke:var(--sand-dim); stroke-width:1.5; stroke-dasharray:4 7; stroke-linecap:round; opacity:.55; }
+  .drift .mark { stroke:var(--coral); stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  @media (prefers-reduced-motion:no-preference) {
+    .drift path.line { stroke-dashoffset:200; animation:drift-in 1.8s ease-out forwards; }
+    @keyframes drift-in { to { stroke-dashoffset:0; } }
   }
 
-  :root {
-    --navy-deep: #0a1f2b;
-    --navy: #123244;
-    --teal: #2f6b73;
-    --sand: #e9dcc3;
-    --sand-dim: #cdbf9d;
-    --coral: #e8792e;
-    --coral-dim: #c25f1c;
-    --foam: #f4efe4;
-  }
+  .eyebrow { font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--sand-dim); margin:0 0 10px; font-weight:600; }
+  h1 { font-family:'Fraunces',serif; font-weight:600; font-size:clamp(30px,8vw,40px); line-height:1.08; margin:0 0 14px; letter-spacing:-.01em; }
+  h1 em { font-style:italic; color:var(--coral); }
+  .board-tag { display:inline-block; background:rgba(233,220,195,.08); border:1px solid rgba(233,220,195,.25); color:var(--sand); font-size:13.5px; padding:6px 12px; border-radius:100px; margin-bottom:22px; }
+  p.lede { font-size:16px; line-height:1.55; color:rgba(244,239,228,.82); margin:0 0 28px; }
+  .reward { font-size:14.5px; color:var(--coral); margin:-18px 0 26px; display:none; }
 
-  * { box-sizing: border-box; }
+  .geo { display:flex; align-items:center; gap:10px; background:rgba(47,107,115,.18); border:1px solid rgba(47,107,115,.5); border-radius:12px; padding:12px 14px; margin-bottom:22px; font-size:13.5px; color:var(--sand); }
+  .geo-icon { flex-shrink:0; width:18px; height:18px; opacity:.85; }
+  .geo-text { flex:1; line-height:1.4; }
+  .geo-btn { background:none; border:1px solid var(--sand-dim); color:var(--sand); font-size:12.5px; font-weight:600; padding:6px 11px; border-radius:8px; cursor:pointer; white-space:nowrap; font-family:inherit; }
+  .geo-btn:hover { border-color:var(--foam); color:var(--foam); }
+  .geo-btn:focus-visible, button:focus-visible, a.btn:focus-visible { outline:2px solid var(--coral); outline-offset:2px; }
+  .geo.on { border-color:var(--coral); background:rgba(232,121,46,.12); }
+  .geo.on .geo-btn { display:none; }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    background: radial-gradient(120% 90% at 50% -10%, var(--navy) 0%, var(--navy-deep) 55%, #071620 100%);
-    color: var(--foam);
-    font-family: 'Inter', -apple-system, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
+  .actions { display:flex; flex-direction:column; gap:12px; }
+  a.btn { display:flex; align-items:center; gap:12px; padding:15px 18px; border-radius:14px; text-decoration:none; font-weight:600; font-size:16px; font-family:'Inter',sans-serif; transition:transform .12s ease, filter .12s ease; }
+  a.btn:active { transform:scale(.98); }
+  a.btn svg { width:21px; height:21px; flex-shrink:0; }
+  .btn-primary { background:var(--coral); color:var(--navy-deep); }
+  .btn-primary:hover { filter:brightness(1.08); }
+  .btn-secondary { background:rgba(244,239,228,.06); border:1px solid rgba(244,239,228,.22); color:var(--foam); }
+  .btn-secondary:hover { background:rgba(244,239,228,.1); }
 
-  body {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 0 20px 60px;
-  }
+  footer { margin-top:40px; text-align:center; font-size:12px; color:rgba(233,220,195,.4); line-height:1.6; }
 
-  .wrap {
-    width: 100%;
-    max-width: 440px;
-    padding-top: 6vh;
-  }
-
-  /* ---- language toggle ---- */
-  .lang-row {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 22px;
-  }
-  .lang-toggle {
-    display: inline-flex;
-    background: rgba(244, 239, 228, 0.06);
-    border: 1px solid rgba(244, 239, 228, 0.2);
-    border-radius: 100px;
-    padding: 3px;
-    gap: 2px;
-  }
-  .lang-toggle button {
-    border: none;
-    background: none;
-    color: var(--sand-dim);
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    padding: 5px 11px;
-    border-radius: 100px;
-    cursor: pointer;
-  }
-  .lang-toggle button.active {
-    background: var(--coral);
-    color: var(--navy-deep);
-  }
-  .lang-toggle button:not(.active):hover { color: var(--foam); }
-
-  /* ---- signature element: drift line + board mark ---- */
-  .drift {
-    width: 100%;
-    height: 74px;
-    margin-bottom: 6px;
-    overflow: visible;
-  }
-  .drift path {
-    fill: none;
-    stroke: var(--sand-dim);
-    stroke-width: 1.5;
-    stroke-dasharray: 4 7;
-    stroke-linecap: round;
-    opacity: 0.55;
-  }
-  .drift .mark {
-    stroke: var(--coral);
-    stroke-width: 2.5;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .drift path.line { stroke-dashoffset: 200; animation: drift-in 1.8s ease-out forwards; }
-    @keyframes drift-in { to { stroke-dashoffset: 0; } }
-  }
-
-  .eyebrow {
-    font-size: 12.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--sand-dim);
-    margin: 0 0 10px;
-    font-weight: 600;
-  }
-
-  h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: clamp(30px, 8vw, 40px);
-    line-height: 1.08;
-    margin: 0 0 14px;
-    color: var(--foam);
-    letter-spacing: -0.01em;
-  }
-  h1 em {
-    font-style: italic;
-    color: var(--coral);
-  }
-
-  .board-tag {
-    display: inline-block;
-    background: rgba(233, 220, 195, 0.08);
-    border: 1px solid rgba(233, 220, 195, 0.25);
-    color: var(--sand);
-    font-size: 13.5px;
-    padding: 6px 12px;
-    border-radius: 100px;
-    margin-bottom: 22px;
-  }
-
-  p.lede {
-    font-size: 16px;
-    line-height: 1.55;
-    color: rgba(244, 239, 228, 0.82);
-    margin: 0 0 28px;
-  }
-
-  .reward {
-    font-size: 14.5px;
-    color: var(--coral);
-    margin: -18px 0 26px;
-    display: none;
-  }
-
-  /* ---- geolocation strip ---- */
-  .geo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(47, 107, 115, 0.18);
-    border: 1px solid rgba(47, 107, 115, 0.5);
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 22px;
-    font-size: 13.5px;
-    color: var(--sand);
-  }
-  .geo-icon { flex-shrink: 0; width: 18px; height: 18px; opacity: 0.85; }
-  .geo-text { flex: 1; line-height: 1.4; }
-  .geo-btn {
-    background: none;
-    border: 1px solid var(--sand-dim);
-    color: var(--sand);
-    font-size: 12.5px;
-    font-weight: 600;
-    padding: 6px 11px;
-    border-radius: 8px;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: inherit;
-  }
-  .geo-btn:hover { border-color: var(--foam); color: var(--foam); }
-  .geo-btn:focus-visible, button:focus-visible, a.btn:focus-visible {
-    outline: 2px solid var(--coral);
-    outline-offset: 2px;
-  }
-  .geo.on { border-color: var(--coral); background: rgba(232,121,46,0.12); }
-  .geo.on .geo-btn { display: none; }
-
-  /* ---- CTAs ---- */
-  .actions { display: flex; flex-direction: column; gap: 12px; }
-
-  a.btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px 18px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 16px;
-    font-family: 'Inter', sans-serif;
-    transition: transform 0.12s ease, filter 0.12s ease;
-  }
-  a.btn:active { transform: scale(0.98); }
-  a.btn svg { width: 21px; height: 21px; flex-shrink: 0; }
-
-  .btn-primary {
-    background: var(--coral);
-    color: var(--navy-deep);
-  }
-  .btn-primary:hover { filter: brightness(1.08); }
-
-  .btn-secondary {
-    background: rgba(244, 239, 228, 0.06);
-    border: 1px solid rgba(244, 239, 228, 0.22);
-    color: var(--foam);
-  }
-  .btn-secondary:hover { background: rgba(244, 239, 228, 0.1); }
-
-  footer {
-    margin-top: 40px;
-    text-align: center;
-    font-size: 12px;
-    color: rgba(233, 220, 195, 0.4);
-    line-height: 1.6;
-  }
+  .state-msg { font-size:15px; line-height:1.6; color:rgba(244,239,228,.75); }
+  .state-msg a { color:var(--coral); }
+  #app { display:none; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="lang-row">
-    <div class="lang-toggle" role="group" aria-label="Langue / Language">
-      <button type="button" id="langFr" class="active">FR</button>
-      <button type="button" id="langEn">EN</button>
+  <div id="loadingView">
+    <p class="eyebrow">Tag NFC — objet retrouvé</p>
+    <h1>Chargement...</h1>
+  </div>
+
+  <div id="notFoundView" style="display:none;">
+    <p class="eyebrow">Tag NFC — objet retrouvé</p>
+    <h1>Fiche introuvable</h1>
+    <p class="state-msg">Ce lien ne correspond à aucune planche enregistrée. Si tu es le propriétaire, tu peux <a href="create.html">en créer une ici</a>.</p>
+  </div>
+
+  <div id="app">
+    <div class="lang-row">
+      <div class="lang-toggle" role="group" aria-label="Langue / Language">
+        <button type="button" id="langFr" class="active">FR</button>
+        <button type="button" id="langEn">EN</button>
+      </div>
     </div>
+
+    <svg class="drift" viewBox="0 0 400 74" aria-hidden="true">
+      <path class="line" d="M 4 55 Q 90 20, 170 45 T 330 30" />
+      <g class="mark" transform="translate(330, 30) rotate(-18)">
+        <ellipse cx="0" cy="0" rx="16" ry="6.2" />
+        <line x1="-16" y1="0" x2="16" y2="0" />
+      </g>
+    </svg>
+
+    <p class="eyebrow" id="txtEyebrow">Tag NFC — objet retrouvé</p>
+    <h1 id="txtHeadline">Tu as trouvé <em>ma planche</em> ?</h1>
+    <div class="board-tag" id="boardTag"></div>
+
+    <p class="lede" id="txtLede"></p>
+    <p class="reward" id="rewardLine"></p>
+
+    <div class="geo" id="geoBox">
+      <svg class="geo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-7.58 7-12A7 7 0 0 0 5 9c0 4.42 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>
+      <span class="geo-text" id="geoText"></span>
+      <button class="geo-btn" id="geoBtn" type="button"></button>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-primary" id="waBtn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.6.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C10 9 9.4 7.6 9.2 7c-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 5 4.3.7.3 1.2.5 1.7.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.2L2 22l5-1.3c1.5.8 3.2 1.3 5 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.3c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3 .8.8-2.9-.2-.3C4 15.1 3.5 13.6 3.5 12 3.5 7.3 7.3 3.5 12 3.5S20.5 7.3 20.5 12 16.7 20.3 12 20.3z"/></svg>
+        <span id="btnWaLabel"></span>
+      </a>
+      <a class="btn btn-secondary" id="smsBtn" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span id="btnSmsLabel"></span>
+      </a>
+      <a class="btn btn-secondary" id="callBtn" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span id="btnCallLabel"></span>
+      </a>
+      <a class="btn btn-secondary" id="mailBtn" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z" stroke="none"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        <span id="btnMailLabel"></span>
+      </a>
+    </div>
+
+    <footer id="txtFooter"></footer>
   </div>
-
-  <svg class="drift" viewBox="0 0 400 74" aria-hidden="true">
-    <path class="line" d="M 4 55 Q 90 20, 170 45 T 330 30" />
-    <g class="mark" transform="translate(330, 30) rotate(-18)">
-      <ellipse cx="0" cy="0" rx="16" ry="6.2" />
-      <line x1="-16" y1="0" x2="16" y2="0" />
-    </g>
-  </svg>
-
-  <p class="eyebrow" id="txtEyebrow">Tag NFC — objet retrouvé</p>
-  <h1 id="txtHeadline">Tu as trouvé <em>ma planche</em> ?</h1>
-  <div class="board-tag" id="boardTag">Planche de kitesurf</div>
-
-  <p class="lede" id="txtLede">
-    Merci infiniment ! Un petit message suffit pour me dire où elle se trouve —
-    choisis simplement le moyen qui te convient le mieux ci-dessous.
-  </p>
-
-  <p class="reward" id="rewardLine"></p>
-
-  <div class="geo" id="geoBox">
-    <svg class="geo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-7.58 7-12A7 7 0 0 0 5 9c0 4.42 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>
-    <span class="geo-text" id="geoText">Partage ta position pour que le message l'inclue automatiquement.</span>
-    <button class="geo-btn" id="geoBtn" type="button">Activer</button>
-  </div>
-
-  <div class="actions">
-    <a class="btn btn-primary" id="waBtn" href="#" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.6.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C10 9 9.4 7.6 9.2 7c-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 5 4.3.7.3 1.2.5 1.7.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.2L2 22l5-1.3c1.5.8 3.2 1.3 5 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.3c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3 .8.8-2.9-.2-.3C4 15.1 3.5 13.6 3.5 12 3.5 7.3 7.3 3.5 12 3.5S20.5 7.3 20.5 12 16.7 20.3 12 20.3z"/></svg>
-      <span id="btnWaLabel">Écrire sur WhatsApp</span>
-    </a>
-    <a class="btn btn-secondary" id="smsBtn" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      <span id="btnSmsLabel">Envoyer un texto</span>
-    </a>
-    <a class="btn btn-secondary" id="callBtn" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-      <span id="btnCallLabel">Appeler</span>
-    </a>
-    <a class="btn btn-secondary" id="mailBtn" href="#">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z" stroke="none"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
-      <span id="btnMailLabel">Envoyer un courriel</span>
-    </a>
-  </div>
-
-  <footer id="txtFooter">
-    Merci d'avoir pris le temps de me contacter — ça compte énormément.<br>
-    Cette page ne collecte ni ne partage ta position ; elle sert uniquement à préparer ton message.
-  </footer>
 
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script>
 (function () {
-  const css = getComputedStyle(document.documentElement);
-  const clean = v => v.replace(/^"|"$/g, '').trim();
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-  const ownerName   = clean(css.getPropertyValue('--owner-name')) || 'moi';
-  const boardLabel  = clean(css.getPropertyValue('--board-label')) || 'ma planche';
-  const waNumber    = clean(css.getPropertyValue('--whatsapp-number'));
-  const smsNumber   = clean(css.getPropertyValue('--sms-number'));
-  const callNumber  = clean(css.getPropertyValue('--call-number'));
-  const email       = clean(css.getPropertyValue('--email'));
-  const rewardLine  = clean(css.getPropertyValue('--reward-line'));
+  const params = new URLSearchParams(location.search);
+  const boardId = params.get('id');
 
-  document.getElementById('boardTag').textContent = boardLabel;
-
-  // ---- traductions ----
   const i18n = {
     fr: {
-      htmlLang: 'fr',
-      title: 'Planche retrouvée — ' + boardLabel,
-      eyebrow: 'Tag NFC — objet retrouvé',
-      headline: 'Tu as trouvé <em>ma planche</em>&nbsp;?',
-      lede: "Merci infiniment&nbsp;! Un petit message suffit pour me dire où elle se trouve — choisis simplement le moyen qui te convient le mieux ci-dessous.",
-      geoDefault: "Partage ta position pour que le message l'inclue automatiquement.",
-      geoBtn: 'Activer',
-      geoOn: 'Position ajoutée au message — merci !',
-      geoDenied: "Position refusée, aucun problème — tu peux simplement décrire l'endroit dans le message.",
-      geoUnavailable: "La localisation n'est pas disponible sur cet appareil — pas de souci, tu peux la décrire dans le message.",
-      btnWa: 'Écrire sur WhatsApp',
-      btnSms: 'Envoyer un texto',
-      btnCall: 'Appeler',
-      btnMail: 'Envoyer un courriel',
-      footer: "Merci d'avoir pris le temps de me contacter — ça compte énormément.<br>Cette page ne collecte ni ne partage ta position&nbsp;; elle sert uniquement à préparer ton message.",
-      mailSubject: 'Planche retrouvée — ' + boardLabel,
-      msgFound: (name, board) => `Bonjour ${name}, j'ai trouvé ta planche (${board}) !`,
-      msgAsk: ' Dis-moi comment te la faire parvenir.',
-      msgLoc: (url) => ` Voici ma position : ${url}`
+      htmlLang:'fr', eyebrow:'Tag NFC — objet retrouvé', headline:'Tu as trouvé <em>ma planche</em>&nbsp;?',
+      lede:"Merci infiniment&nbsp;! Un petit message suffit pour me dire où elle se trouve — choisis simplement le moyen qui te convient le mieux ci-dessous.",
+      geoDefault:"Partage ta position pour que le message l'inclue automatiquement.", geoBtn:'Activer',
+      geoOn:'Position ajoutée au message — merci !',
+      geoDenied:"Position refusée, aucun problème — tu peux simplement décrire l'endroit dans le message.",
+      geoUnavailable:"La localisation n'est pas disponible sur cet appareil — pas de souci, tu peux la décrire dans le message.",
+      btnWa:'Écrire sur WhatsApp', btnSms:'Envoyer un texto', btnCall:'Appeler', btnMail:'Envoyer un courriel',
+      footer:"Merci d'avoir pris le temps de me contacter — ça compte énormément.<br>Cette page ne collecte ni ne partage ta position&nbsp;; elle sert uniquement à préparer ton message.",
+      msgFound:(n,b)=>`Bonjour ${n}, j'ai trouvé ta planche (${b}) !`, msgAsk:' Dis-moi comment te la faire parvenir.',
+      msgLoc:(u)=>` Voici ma position : ${u}`, mailSubjectPrefix:'Planche retrouvée — '
     },
     en: {
-      htmlLang: 'en',
-      title: 'Found board — ' + boardLabel,
-      eyebrow: 'NFC tag — lost & found',
-      headline: 'Found <em>my board</em>?',
-      lede: "Thank you so much! A quick message is all it takes to let me know where it is — just pick whichever way works for you below.",
-      geoDefault: 'Share your location so it gets added to the message automatically.',
-      geoBtn: 'Enable',
-      geoOn: 'Location added to the message — thank you!',
-      geoDenied: "Location declined, no worries — you can just describe the spot in the message.",
-      geoUnavailable: "Location isn't available on this device — no worries, you can describe it in the message.",
-      btnWa: 'Message on WhatsApp',
-      btnSms: 'Send a text',
-      btnCall: 'Call',
-      btnMail: 'Send an email',
-      footer: "Thanks for taking the time to reach out — it really means a lot.<br>This page doesn't collect or share your location; it's only used to prepare your message.",
-      mailSubject: 'Found board — ' + boardLabel,
-      msgFound: (name, board) => `Hi ${name}, I found your board (${board})!`,
-      msgAsk: " Let me know how to get it back to you.",
-      msgLoc: (url) => ` Here's my location: ${url}`
+      htmlLang:'en', eyebrow:'NFC tag — lost & found', headline:'Found <em>my board</em>?',
+      lede:"Thank you so much! A quick message is all it takes to let me know where it is — just pick whichever way works for you below.",
+      geoDefault:'Share your location so it gets added to the message automatically.', geoBtn:'Enable',
+      geoOn:'Location added to the message — thank you!',
+      geoDenied:"Location declined, no worries — you can just describe the spot in the message.",
+      geoUnavailable:"Location isn't available on this device — no worries, you can describe it in the message.",
+      btnWa:'Message on WhatsApp', btnSms:'Send a text', btnCall:'Call', btnMail:'Send an email',
+      footer:"Thanks for taking the time to reach out — it really means a lot.<br>This page doesn't collect or share your location; it's only used to prepare your message.",
+      msgFound:(n,b)=>`Hi ${n}, I found your board (${b})!`, msgAsk:" Let me know how to get it back to you.",
+      msgLoc:(u)=>` Here's my location: ${u}`, mailSubjectPrefix:'Found board — '
     }
   };
 
   let lang = 'fr';
-  let mapsUrl = null; // set once the person shares their location
+  let mapsUrl = null;
+  let board = null;
+
+  const geoBox  = document.getElementById('geoBox');
+  const geoText = document.getElementById('geoText');
+  const geoBtn  = document.getElementById('geoBtn');
 
   function baseMessage() {
     const t = i18n[lang];
-    return t.msgFound(ownerName, boardLabel) + (mapsUrl ? t.msgLoc(mapsUrl) : t.msgAsk);
+    return t.msgFound(board.ownerName, board.boardLabel) + (mapsUrl ? t.msgLoc(mapsUrl) : t.msgAsk);
   }
 
   function refreshLinks() {
     const t = i18n[lang];
-    const msg = baseMessage();
-    const enc = encodeURIComponent(msg);
-
-    document.getElementById('waBtn').href   = `https://wa.me/${waNumber}?text=${enc}`;
-    document.getElementById('smsBtn').href  = `sms:${smsNumber}${/iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?'}body=${enc}`;
-    document.getElementById('callBtn').href = `tel:${callNumber}`;
-    document.getElementById('mailBtn').href = `mailto:${email}?subject=${encodeURIComponent(t.mailSubject)}&body=${enc}`;
+    const enc = encodeURIComponent(baseMessage());
+    document.getElementById('waBtn').href   = `https://wa.me/${board.waNumber}?text=${enc}`;
+    document.getElementById('smsBtn').href  = `sms:${board.smsNumber}${/iPhone|iPad|iPod/.test(navigator.userAgent) ? '&' : '?'}body=${enc}`;
+    document.getElementById('callBtn').href = `tel:${board.callNumber}`;
+    document.getElementById('mailBtn').href = `mailto:${board.email}?subject=${encodeURIComponent(t.mailSubjectPrefix + board.boardLabel)}&body=${enc}`;
   }
 
   function applyLang(newLang) {
     lang = newLang;
     const t = i18n[lang];
-
     document.documentElement.lang = t.htmlLang;
-    document.title = t.title;
+    document.title = (lang === 'fr' ? 'Planche retrouvée — ' : 'Found board — ') + board.boardLabel;
     document.getElementById('txtEyebrow').textContent = t.eyebrow;
     document.getElementById('txtHeadline').innerHTML = t.headline;
     document.getElementById('txtLede').textContent = t.lede;
@@ -397,59 +203,68 @@
     document.getElementById('btnCallLabel').textContent = t.btnCall;
     document.getElementById('btnMailLabel').textContent = t.btnMail;
     document.getElementById('txtFooter').innerHTML = t.footer;
-
     if (!geoBox.classList.contains('on')) {
       geoText.textContent = t.geoDefault;
       geoBtn.textContent = t.geoBtn;
     } else {
       geoText.textContent = t.geoOn;
     }
-
     document.getElementById('langFr').classList.toggle('active', lang === 'fr');
     document.getElementById('langEn').classList.toggle('active', lang === 'en');
-
     refreshLinks();
   }
 
-  if (rewardLine) {
-    const el = document.getElementById('rewardLine');
-    el.textContent = rewardLine;
-    el.style.display = 'block';
-  }
-
-  const geoBox  = document.getElementById('geoBox');
-  const geoText = document.getElementById('geoText');
-  const geoBtn  = document.getElementById('geoBtn');
-
-  document.getElementById('langFr').addEventListener('click', () => applyLang('fr'));
-  document.getElementById('langEn').addEventListener('click', () => applyLang('en'));
-
-  // langue de départ : celle du téléphone si dispo, sinon français
-  const browserLang = (navigator.language || 'fr').slice(0, 2).toLowerCase();
-  applyLang(browserLang === 'en' ? 'en' : 'fr');
-
-  geoBtn.addEventListener('click', function () {
-    const t = i18n[lang];
-    if (!('geolocation' in navigator)) {
-      geoText.textContent = t.geoUnavailable;
+  async function init() {
+    if (!boardId) { showNotFound(); return; }
+    try {
+      const doc = await db.collection('boards').doc(boardId).get();
+      if (!doc.exists) { showNotFound(); return; }
+      board = doc.data();
+    } catch (e) {
+      console.error(e);
+      showNotFound();
       return;
     }
-    geoBtn.textContent = '...';
-    navigator.geolocation.getCurrentPosition(
-      function (pos) {
-        const { latitude, longitude } = pos.coords;
-        mapsUrl = `https://maps.google.com/?q=${latitude},${longitude}`;
-        refreshLinks();
-        geoBox.classList.add('on');
-        geoText.textContent = i18n[lang].geoOn;
-      },
-      function () {
-        geoText.textContent = t.geoDenied;
-        geoBtn.textContent = t.geoBtn;
-      },
-      { enableHighAccuracy: true, timeout: 8000 }
-    );
-  });
+
+    document.getElementById('loadingView').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('boardTag').textContent = board.boardLabel;
+
+    if (board.rewardLine) {
+      const el = document.getElementById('rewardLine');
+      el.textContent = board.rewardLine;
+      el.style.display = 'block';
+    }
+
+    document.getElementById('langFr').addEventListener('click', () => applyLang('fr'));
+    document.getElementById('langEn').addEventListener('click', () => applyLang('en'));
+
+    const browserLang = (navigator.language || 'fr').slice(0, 2).toLowerCase();
+    applyLang(browserLang === 'en' ? 'en' : 'fr');
+
+    geoBtn.addEventListener('click', function () {
+      const t = i18n[lang];
+      if (!('geolocation' in navigator)) { geoText.textContent = t.geoUnavailable; return; }
+      geoBtn.textContent = '...';
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+          mapsUrl = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+          refreshLinks();
+          geoBox.classList.add('on');
+          geoText.textContent = i18n[lang].geoOn;
+        },
+        function () { geoText.textContent = t.geoDenied; geoBtn.textContent = t.geoBtn; },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    });
+  }
+
+  function showNotFound() {
+    document.getElementById('loadingView').style.display = 'none';
+    document.getElementById('notFoundView').style.display = 'block';
+  }
+
+  init();
 })();
 </script>
 </body>

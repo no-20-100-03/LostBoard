@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enregistrer une planche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep:#0a1f2b; --navy:#123244; --sand:#e9dcc3; --sand-dim:#cdbf9d;
+    --coral:#e8792e; --foam:#f4efe4;
+  }
+  * { box-sizing: border-box; }
+  html,body { margin:0; min-height:100%; background:radial-gradient(120% 90% at 50% -10%, var(--navy) 0%, var(--navy-deep) 55%, #071620 100%); color:var(--foam); font-family:'Inter',-apple-system,sans-serif; }
+  body { display:flex; justify-content:center; padding:0 20px 60px; }
+  .wrap { width:100%; max-width:460px; padding-top:7vh; }
+  .eyebrow { font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--sand-dim); font-weight:600; margin:0 0 10px; }
+  h1 { font-family:'Fraunces',serif; font-weight:600; font-size:clamp(28px,7vw,36px); line-height:1.1; margin:0 0 14px; }
+  p.lede { font-size:15.5px; line-height:1.55; color:rgba(244,239,228,.8); margin:0 0 30px; }
+  label { display:block; font-size:13px; font-weight:600; color:var(--sand); margin:0 0 6px; }
+  .field { margin-bottom:18px; }
+  .hint { font-size:12px; color:var(--sand-dim); margin-top:5px; line-height:1.4; }
+  input, textarea {
+    width:100%; background:rgba(244,239,228,.06); border:1px solid rgba(244,239,228,.22);
+    border-radius:10px; padding:12px 13px; color:var(--foam); font-family:inherit; font-size:15px;
+  }
+  input:focus, textarea:focus { outline:2px solid var(--coral); outline-offset:1px; border-color:var(--coral); }
+  textarea { resize:vertical; min-height:44px; }
+  button.submit {
+    width:100%; background:var(--coral); color:var(--navy-deep); border:none; border-radius:14px;
+    padding:15px; font-size:16px; font-weight:700; font-family:inherit; cursor:pointer; margin-top:8px;
+  }
+  button.submit:hover { filter:brightness(1.08); }
+  button.submit:disabled { opacity:.5; cursor:not-allowed; }
+  .error { color:#f2a154; font-size:13.5px; margin-top:10px; display:none; }
+
+  .result { display:none; }
+  .result-box {
+    background:rgba(232,121,46,.1); border:1px solid rgba(232,121,46,.4); border-radius:14px;
+    padding:18px; margin-bottom:16px;
+  }
+  .result-box h3 { margin:0 0 6px; font-size:14px; color:var(--coral); }
+  .result-box .url { font-size:13.5px; word-break:break-all; color:var(--foam); background:rgba(0,0,0,.2); padding:10px 12px; border-radius:8px; margin:8px 0; }
+  .copy-btn { font-size:12.5px; font-weight:600; background:none; border:1px solid var(--sand-dim); color:var(--sand); padding:6px 11px; border-radius:8px; cursor:pointer; }
+  .copy-btn:hover { border-color:var(--foam); color:var(--foam); }
+  .warn { font-size:13px; color:#f2a154; line-height:1.5; margin-top:18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="formView">
+    <p class="eyebrow">Objets retrouvés — planches de kite</p>
+    <h1>Enregistre ta planche</h1>
+    <p class="lede">Remplis ce formulaire une fois. Tu recevras un lien à écrire sur ton tag NFC, et un lien secret pour modifier tes infos plus tard.</p>
+
+    <div class="field">
+      <label for="ownerName">Ton prénom</label>
+      <input id="ownerName" type="text" maxlength="40" required>
+    </div>
+    <div class="field">
+      <label for="boardLabel">Description de la planche</label>
+      <input id="boardLabel" type="text" maxlength="80" placeholder="ex. Planche kite bleue/orange, Duotone" required>
+    </div>
+    <div class="field">
+      <label for="waNumber">Numéro WhatsApp</label>
+      <input id="waNumber" type="tel" placeholder="15145551234" required>
+      <div class="hint">Format international, sans + ni espaces. Ex. Québec : 15145551234</div>
+    </div>
+    <div class="field">
+      <label for="smsNumber">Numéro pour texto</label>
+      <input id="smsNumber" type="tel" placeholder="+15145551234" required>
+      <div class="hint">Même numéro que ci-dessus, mais avec le +</div>
+    </div>
+    <div class="field">
+      <label for="callNumber">Numéro pour appel</label>
+      <input id="callNumber" type="tel" placeholder="+15145551234" required>
+    </div>
+    <div class="field">
+      <label for="email">Courriel</label>
+      <input id="email" type="email" placeholder="toi@example.com" required>
+    </div>
+    <div class="field">
+      <label for="rewardLine">Message de remerciement (optionnel)</label>
+      <textarea id="rewardLine" maxlength="120" placeholder="ex. Une petite récompense t'attend 🙂"></textarea>
+    </div>
+
+    <button class="submit" id="submitBtn" type="button">Créer mes liens</button>
+    <div class="error" id="errorMsg"></div>
+  </div>
+
+  <div class="result" id="resultView">
+    <p class="eyebrow">C'est prêt</p>
+    <h1>Tes deux liens</h1>
+    <p class="lede">Garde cette page ouverte ou copie les deux liens quelque part de sûr — ils ne seront plus jamais réaffichés ainsi.</p>
+
+    <div class="result-box">
+      <h3>🏄 Lien public — à écrire sur ton tag NFC</h3>
+      <div class="url" id="publicUrl"></div>
+      <button class="copy-btn" data-copy="publicUrl">Copier</button>
+    </div>
+
+    <div class="result-box">
+      <h3>🔑 Lien secret — pour modifier tes infos plus tard</h3>
+      <div class="url" id="adminUrl"></div>
+      <button class="copy-btn" data-copy="adminUrl">Copier</button>
+    </div>
+
+    <p class="warn">⚠️ Le lien secret est la <strong>seule</strong> façon de modifier tes coordonnées plus tard — il n'y a ni compte, ni mot de passe à récupérer. Mets-le dans tes favoris ou envoie-le-toi par courriel maintenant.</p>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function randomId(len) {
+  const chars = 'abcdefghijkmnpqrstuvwxyz23456789'; // sans caractères ambigus
+  const arr = new Uint32Array(len);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, n => chars[n % chars.length]).join('');
+}
+
+const submitBtn = document.getElementById('submitBtn');
+const errorMsg  = document.getElementById('errorMsg');
+
+submitBtn.addEventListener('click', async function () {
+  const ownerName  = document.getElementById('ownerName').value.trim();
+  const boardLabel = document.getElementById('boardLabel').value.trim();
+  const waNumber   = document.getElementById('waNumber').value.trim();
+  const smsNumber  = document.getElementById('smsNumber').value.trim();
+  const callNumber = document.getElementById('callNumber').value.trim();
+  const email      = document.getElementById('email').value.trim();
+  const rewardLine = document.getElementById('rewardLine').value.trim();
+
+  errorMsg.style.display = 'none';
+
+  if (!ownerName || !boardLabel || !waNumber || !smsNumber || !callNumber || !email) {
+    errorMsg.textContent = 'Merci de remplir tous les champs obligatoires.';
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Création en cours...';
+
+  const boardId  = randomId(8);
+  const editCode = randomId(12);
+
+  try {
+    await db.collection('boards').doc(boardId).set({
+      ownerName, boardLabel, waNumber, smsNumber, callNumber, email, rewardLine,
+      editCode,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    const base = location.href.replace(/create\.html.*$/, '');
+    document.getElementById('publicUrl').textContent = `${base}index.html?id=${boardId}`;
+    document.getElementById('adminUrl').textContent   = `${base}admin.html?id=${boardId}&code=${editCode}`;
+
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('resultView').style.display = 'block';
+  } catch (e) {
+    console.error(e);
+    errorMsg.textContent = "Une erreur est survenue lors de la création — vérifie que firebase-config.js est bien rempli et que Firestore est activé.";
+    errorMsg.style.display = 'block';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Créer mes liens';
+  }
+});
+
+document.querySelectorAll('.copy-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    const text = document.getElementById(btn.dataset.copy).textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      const orig = btn.textContent;
+      btn.textContent = 'Copié !';
+      setTimeout(function () { btn.textContent = orig; }, 1500);
+    });
+  });
+});
+</script>
+</body>
+</html>
