@@ -1,15 +1,8 @@
-/* ============================================================
-   CONFIGURATION FIREBASE — à remplir UNE SEULE FOIS.
-   Va chercher ces valeurs dans :
-   Firebase Console > ⚙️ Paramètres du projet > Général >
-   "Vos applications" > icône </> (app web) > SDK config
-   ============================================================ */
-
 const firebaseConfig = {
-  apiKey: "COLLE_TA_CLE_ICI",
-  authDomain: "TON-PROJET.firebaseapp.com",
-  projectId: "TON-PROJET",
-  storageBucket: "TON-PROJET.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:xxxxxxxxxxxxxxxx"
+  apiKey: "AIzaSyDR0HIfxKByQKqcizIa_Bpx7YHrG2AUKqM",
+  authDomain: "lostboard-c584f.firebaseapp.com",
+  projectId: "lostboard-c584f",
+  storageBucket: "lostboard-c584f.firebasestorage.app",
+  messagingSenderId: "380060648590",
+  appId: "1:380060648590:web:60c827210cd656dca635df"
 };
